@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shreya Gupta — District Generalist Application</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #16161f;
+    --purple: #6c4fff;
+    --purple-light: #9b7fff;
+    --purple-dim: rgba(108,79,255,0.15);
+    --gold: #f5c842;
+    --gold-dim: rgba(245,200,66,0.12);
+    --text: #f0eff8;
+    --text-muted: #888899;
+    --border: rgba(255,255,255,0.07);
+    --card: rgba(255,255,255,0.04);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 40px;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px; letter-spacing: 0.15em; color: var(--purple-light);
+    text-transform: uppercase;
+  }
+  .nav-tag {
+    font-size: 12px; color: var(--text-muted); letter-spacing: 0.08em;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+  }
+  .hero-glow {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 700px; height: 500px;
+    background: radial-gradient(ellipse at top, rgba(108,79,255,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--purple-dim); border: 1px solid rgba(108,79,255,0.3);
+    border-radius: 100px; padding: 6px 16px;
+    font-size: 12px; font-family: 'DM Mono', monospace; color: var(--purple-light);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-pill::before { content: '🍽️'; font-size: 14px; }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  .hero h1 em {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--purple-light), var(--gold));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    margin-top: 24px;
+    font-size: 18px; color: var(--text-muted); max-width: 480px; margin-inline: auto;
+    animation: fadeUp 0.6s 0.2s ease both;
+    margin-top: 24px;
+  }
+  .hero-cta {
+    margin-top: 48px;
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px; border-radius: 12px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    text-decoration: none; transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-primary {
+    background: var(--purple); color: white;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .btn-primary:hover { background: var(--purple-light); transform: translateY(-2px); }
+  .btn-ghost {
+    background: var(--card); color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+  .scroll-hint {
+    position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: var(--text-muted); font-size: 11px; letter-spacing: 0.1em;
+    font-family: 'DM Mono', monospace; text-transform: uppercase;
+    animation: bounce 2s infinite;
+  }
+  .scroll-hint::after {
+    content: '↓'; font-size: 18px;
+  }
+
+  /* ── SECTION ── */
+  section { position: relative; z-index: 1; }
+  .section-inner { max-width: 960px; margin: 0 auto; padding: 80px 24px; }
+  .section-label {
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--purple-light);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 52px); font-weight: 700; line-height: 1.15;
+    margin-bottom: 24px;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .divider {
+    height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 24px;
+  }
+
+  /* ── USER STORY ── */
+  .user-story-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2px; border-radius: 20px; overflow: hidden;
+    border: 1px solid var(--border); margin-top: 40px;
+  }
+  @media(max-width:640px) { .user-story-grid { grid-template-columns: 1fr; } }
+  .us-card {
+    background: var(--bg3); padding: 32px;
+    transition: background 0.2s;
+  }
+  .us-card:hover { background: rgba(108,79,255,0.08); }
+  .us-icon { font-size: 32px; margin-bottom: 16px; }
+  .us-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+  .us-card p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+  .us-card.featured {
+    background: var(--purple-dim); border: 1px solid rgba(108,79,255,0.25);
+    grid-column: span 2;
+  }
+  @media(max-width:640px) { .us-card.featured { grid-column: span 1; } }
+  .us-card.featured p { font-size: 16px; color: var(--text); }
+
+  /* ── MENU APPLICATION ── */
+  .menu-section { background: var(--bg2); }
+  .menu-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2px; margin-top: 40px;
+    border-radius: 20px; overflow: hidden; border: 1px solid var(--border);
+  }
+  @media(max-width:640px) { .menu-grid { grid-template-columns: 1fr; } }
+  .menu-item {
+    background: var(--bg3); padding: 32px;
+    display: flex; gap: 20px; align-items: flex-start;
+    transition: all 0.2s;
+  }
+  .menu-item:hover { background: var(--card); }
+  .menu-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px; font-weight: 900; line-height: 1;
+    color: var(--purple-dim);
+    background: linear-gradient(180deg, var(--purple-light), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    flex-shrink: 0; width: 48px;
+  }
+  .menu-content h3 {
+    font-size: 16px; font-weight: 600; margin-bottom: 6px;
+    color: var(--gold);
+  }
+  .menu-content p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+  .menu-tag {
+    display: inline-block; font-size: 10px;
+    font-family: 'DM Mono', monospace; letter-spacing: 0.1em;
+    padding: 3px 10px; border-radius: 100px;
+    background: var(--purple-dim); color: var(--purple-light);
+    border: 1px solid rgba(108,79,255,0.2);
+    margin-bottom: 10px; text-transform: uppercase;
+  }
+
+  /* ── DIAGNOSIS ── */
+  .diagnosis-card {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 20px; padding: 40px; margin-top: 40px;
+    position: relative; overflow: hidden;
+  }
+  .diagnosis-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--gold));
+  }
+  .diagnosis-card blockquote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 3vw, 28px); font-style: italic;
+    line-height: 1.5; color: var(--text);
+    margin-bottom: 24px;
+  }
+  .diagnosis-card .observation {
+    font-size: 14px; color: var(--text-muted); line-height: 1.8;
+    padding: 20px; background: var(--bg2);
+    border-radius: 12px; border-left: 3px solid var(--purple);
+    margin-bottom: 16px;
+  }
+  .blank {
+    display: inline-block;
+    background: var(--gold-dim); border: 1px dashed var(--gold);
+    color: var(--gold); padding: 2px 12px; border-radius: 6px;
+    font-family: 'DM Mono', monospace; font-size: 12px;
+    font-style: normal; letter-spacing: 0.05em;
+  }
+
+  /* ── 30-60-90 ── */
+  .plan-section { background: var(--bg2); }
+  .plan-timeline {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; margin-top: 40px;
+    border-radius: 20px; overflow: hidden; border: 1px solid var(--border);
+  }
+  @media(max-width:640px) { .plan-timeline { grid-template-columns: 1fr; } }
+  .plan-item {
+    background: var(--bg3); padding: 32px;
+    transition: background 0.2s;
+  }
+  .plan-item:hover { background: rgba(108,79,255,0.06); }
+  .plan-day {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px; font-weight: 900; line-height: 1;
+    background: linear-gradient(135deg, var(--purple-light), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  .plan-label {
+    font-family: 'DM Mono', monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 20px;
+  }
+  .plan-item h3 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+  .plan-item ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .plan-item li {
+    font-size: 13px; color: var(--text-muted); padding-left: 16px; position: relative; line-height: 1.6;
+  }
+  .plan-item li::before {
+    content: '→'; position: absolute; left: 0; color: var(--purple-light); font-size: 11px;
+  }
+
+  /* ── EXPERIENCE ── */
+  .exp-list { margin-top: 40px; display: flex; flex-direction: column; gap: 2px; }
+  .exp-item {
+    background: var(--bg3); border-radius: 0; padding: 28px 32px;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 16px; align-items: start;
+    border: 1px solid transparent;
+    transition: all 0.2s; cursor: default;
+  }
+  .exp-item:first-child { border-radius: 20px 20px 0 0; }
+  .exp-item:last-child { border-radius: 0 0 20px 20px; }
+  .exp-item:hover { background: var(--purple-dim); border-color: rgba(108,79,255,0.2); }
+  .exp-role { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .exp-company { font-size: 13px; color: var(--purple-light); margin-bottom: 8px; }
+  .exp-desc { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+  .exp-meta {
+    text-align: right;
+    font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* ── SKILLS ── */
+  .skills-grid {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 40px;
+  }
+  .skill-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 100px;
+    font-size: 13px; font-weight: 500;
+    background: var(--bg3); border: 1px solid var(--border);
+    color: var(--text-muted); transition: all 0.2s; cursor: default;
+  }
+  .skill-chip:hover {
+    background: var(--purple-dim); border-color: rgba(108,79,255,0.3);
+    color: var(--purple-light); transform: translateY(-2px);
+  }
+  .skill-chip.highlight {
+    background: var(--purple-dim); border-color: rgba(108,79,255,0.3);
+    color: var(--purple-light);
+  }
+
+  /* ── THE ASK ── */
+  .ask-section {
+    background: linear-gradient(135deg, rgba(108,79,255,0.12), rgba(245,200,66,0.06));
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .ask-inner { text-align: center; max-width: 640px; margin: 0 auto; padding: 80px 24px; }
+  .ask-inner .section-title { margin-bottom: 16px; }
+  .ask-inner p { font-size: 16px; color: var(--text-muted); line-height: 1.8; margin-bottom: 40px; }
+  .contact-strip {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    margin-top: 32px;
+  }
+  .contact-item {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'DM Mono', monospace; font-size: 12px;
+    color: var(--text-muted); padding: 10px 20px;
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 32px 40px; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+    font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  /* Intersection observer fade-ins */
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ── DISTRICT BADGE ── */
+  .district-badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, #1a1440, #2a1a70);
+    border: 1px solid rgba(108,79,255,0.4);
+    border-radius: 14px; padding: 14px 20px;
+    font-size: 14px; font-weight: 600;
+    margin-bottom: 48px;
+  }
+  .district-badge .logo-text {
+    font-family: 'DM Mono', monospace; font-size: 16px; letter-spacing: 0.08em;
+    color: white;
+  }
+  .district-badge .logo-text span { color: var(--purple-light); }
+  .district-badge .role-tag {
+    background: var(--purple); color: white;
+    font-size: 11px; padding: 3px 10px; border-radius: 100px;
+    font-family: 'DM Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+
+  .highlight-box {
+    background: var(--gold-dim); border: 1px solid rgba(245,200,66,0.2);
+    border-radius: 12px; padding: 20px 24px; margin-top: 24px;
+  }
+  .highlight-box p { font-size: 14px; color: var(--text); line-height: 1.7; }
+
+  .stat-row {
+    display: flex; gap: 2px; margin: 32px 0;
+    border-radius: 16px; overflow: hidden; border: 1px solid var(--border);
+  }
+  .stat {
+    flex: 1; background: var(--bg3); padding: 24px 20px; text-align: center;
+    transition: background 0.2s;
+  }
+  .stat:hover { background: var(--purple-dim); }
+  .stat-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px; font-weight: 900;
+    background: linear-gradient(135deg, var(--gold), var(--purple-light));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    line-height: 1;
+  }
+  .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 6px; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 0.1em; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">district<span style="color:var(--text-muted)"> / </span>application</div>
+  <div class="nav-tag">Generalist Role · 2026</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div>
+    <div class="district-badge">
+      <div class="logo-text">district <span>PASS</span></div>
+      <div class="role-tag">Applicant</div>
+    </div>
+    <div class="hero-pill">open application — generalist</div>
+    <h1>Hi District,<br>I'm <em>Shreya.</em></h1>
+    <p class="hero-sub">User. Builder. The person who stalked menus at midnight and thought — I could help make this even better.</p>
+    <div class="hero-cta">
+      <a href="#user-story" class="btn btn-primary">See My User Story 🍽️</a>
+      <a href="#the-ask" class="btn btn-ghost">Jump to Contact →</a>
+    </div>
+  </div>
+  <div class="scroll-hint">scroll</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- USER STORY -->
+<section id="user-story">
+  <div class="section-inner">
+    <div class="section-label reveal">The User Before The Candidate</div>
+    <h2 class="section-title reveal">My <em>history</em> with District</h2>
+    <p class="reveal" style="color:var(--text-muted);font-size:16px;max-width:600px;">Before I wrote this application, I was already a user. Here's what that actually looked like.</p>
+
+    <div class="user-story-grid reveal">
+      <div class="us-card featured">
+        <div class="us-icon">📱</div>
+        <h3>The Midnight Menu Stalk</h3>
+        <p>11:47pm. Kaveri Kunj, Agra. Not hungry — just curious. I've opened the District app just to browse restaurants I probably won't visit that week. The Dining Carnival banner was actually the thing that made me check the cashback deal before deciding where to go for a friend's dinner. That's a product working exactly as it should.</p>
+      </div>
+      <div class="us-card">
+        <div class="us-icon">🪑</div>
+        <h3>Table Bookings</h3>
+        <p>Used it. Loved the confirmation flow. Noticed the drop-off moment where <span class="blank">[add specific observation about your table booking experience]</span>.</p>
+      </div>
+      <div class="us-card">
+        <div class="us-icon">💳</div>
+        <h3>Dining Transactions</h3>
+        <p>The payments section is clean. The one thing I kept wondering: <span class="blank">[what would you add/change here?]</span>.</p>
+      </div>
+      <div class="us-card">
+        <div class="us-icon">🎟️</div>
+        <h3>District Pass — Almost</h3>
+        <p>I've seen the ₹999 Pass banner multiple times. Haven't converted yet. Ask me why — that's a whole product conversation about the value prop framing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DIAGNOSIS -->
+<section>
+  <div class="section-inner">
+    <div class="section-label reveal">One Observation, Honest</div>
+    <h2 class="section-title reveal">A thing I'd <em>fix</em></h2>
+
+    <div class="diagnosis-card reveal">
+      <blockquote>"The Dining Carnival cashback is prominent — but the redemption path isn't."</blockquote>
+
+      <div class="observation">
+        <strong>What I noticed:</strong> The hero banner on the District home screen does a great job grabbing attention with "Get assured 10% cashback." But when I tried to trace the full journey — where does the cashback land, how do I claim it, how do I know it worked — it required more taps than the promise warranted. <span class="blank">[Add your specific observation here — what exactly made you pause?]</span>
+      </div>
+
+      <div class="observation">
+        <strong>What I'd explore:</strong> A lightweight "cashback journey indicator" — something as simple as a persistent pill after dining that says "₹X is on its way" — could reduce support queries, increase trust, and improve repeat booking rates. The cost is low. The signal it sends about the product's reliability is high. <span class="blank">[Replace with your actual fix idea if you have one]</span>
+      </div>
+
+      <div class="highlight-box">
+        <p>🧠 This is the kind of thing I notice as a user — and the kind of thing I'd want to spend my days solving as a generalist. Ambiguity isn't a blocker for me. It's usually where the interesting work is.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MENU APPLICATION -->
+<section class="menu-section">
+  <div class="section-inner">
+    <div class="section-label reveal">The Application, as a Menu</div>
+    <h2 class="section-title reveal">What I'm <em>serving</em></h2>
+
+    <div class="menu-grid reveal">
+      <div class="menu-item">
+        <div class="menu-number">01</div>
+        <div class="menu-content">
+          <div class="menu-tag">Starters</div>
+          <h3>What I bring in Week 1</h3>
+          <p>I listen before I talk. I'll map how teams work, what slows them down, and where generalist energy is most needed. I won't wait to be assigned — I'll find the gap and start filling it.</p>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-number">02</div>
+        <div class="menu-content">
+          <div class="menu-tag">Mains</div>
+          <h3>Core Skills on the Plate</h3>
+          <p>Ops thinking. Cross-functional coordination. Data-backed decisions. Structured problem solving (McKinsey Forward certified). I've built admissions teams, managed P&Ls, and closed MoUs — often across ambiguity.</p>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-number">03</div>
+        <div class="menu-content">
+          <div class="menu-tag">Side Dish</div>
+          <h3>The Bonus</h3>
+          <p>I have a consulting lens (Warwick MSc Management) and a sales instinct (IDP, Masters' Union). That combo is rare. It means I can think about a problem at the strategy level and execute at the ground level in the same week.</p>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-content" style="padding-left:0">
+          <div class="menu-number">04</div>
+        </div>
+        <div class="menu-content">
+          <div class="menu-tag">Dessert</div>
+          <h3>Long-Term Bets</h3>
+          <p>Give me 6 months and I'll have found a workflow, a metric, or a partnership that didn't exist before. I'm at my best when the role is a blank canvas with a clear north star. <span class="blank">[Add a specific ambition for this role here]</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- 30-60-90 -->
+<section class="plan-section">
+  <div class="section-inner">
+    <div class="section-label reveal">The Plan</div>
+    <h2 class="section-title reveal">Day 1 → Day <em>90</em></h2>
+
+    <div class="plan-timeline reveal">
+      <div class="plan-item">
+        <div class="plan-day">30</div>
+        <div class="plan-label">Days — Learn</div>
+        <h3>Understand before acting</h3>
+        <ul>
+          <li>Shadow every core function: sales, product, ops, analytics</li>
+          <li>Map the Dining Out user journey end-to-end, not just in the app</li>
+          <li>Identify the 3 biggest unresolved team pain points</li>
+          <li>Talk to 10 District restaurant partners directly</li>
+          <li><span class="blank">[Add one thing you'd specifically want to learn]</span></li>
+        </ul>
+      </div>
+      <div class="plan-item">
+        <div class="plan-day">60</div>
+        <div class="plan-label">Days — Contribute</div>
+        <h3>Earn a seat, own a thing</h3>
+        <ul>
+          <li>Own one defined process end-to-end — and improve it measurably</li>
+          <li>Produce a short competitive teardown of how rivals handle discovery</li>
+          <li>Run point on at least one cross-team coordination effort</li>
+          <li>Surface 2–3 actionable insights from user behavior data</li>
+          <li><span class="blank">[Add a deliverable you'd want to own by Day 60]</span></li>
+        </ul>
+      </div>
+      <div class="plan-item">
+        <div class="plan-day">90</div>
+        <div class="plan-label">Days — Define</div>
+        <h3>Make the role mine</h3>
+        <ul>
+          <li>Propose a roadmap for one growth or ops initiative I've spotted</li>
+          <li>Build a stakeholder map for a key partnership opportunity</li>
+          <li>Present a recommendation to leadership with data to back it up</li>
+          <li>Be the person a teammate thinks of when something doesn't fit neatly</li>
+          <li><span class="blank">[What does success look like for you at Day 90?]</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERIENCE -->
+<section>
+  <div class="section-inner">
+    <div class="section-label reveal">The Track Record</div>
+    <h2 class="section-title reveal">Where I've <em>been</em></h2>
+
+    <div class="stat-row reveal">
+      <div class="stat"><div class="stat-val">100%</div><div class="stat-label">Visa approval rate at IDP</div></div>
+      <div class="stat"><div class="stat-val">25%</div><div class="stat-label">Cut time-to-hire at Masters' Union</div></div>
+      <div class="stat"><div class="stat-val">₹14Cr</div><div class="stat-label">Education loans approved</div></div>
+      <div class="stat"><div class="stat-val">20→15</div><div class="stat-label">Days, enrolment cycle compressed</div></div>
+    </div>
+
+    <div class="exp-list reveal">
+      <div class="exp-item">
+        <div>
+          <div class="exp-role">Program Manager</div>
+          <div class="exp-company">Masters' Union, Gurugram</div>
+          <div class="exp-desc">Built & led a 7-member admissions team. Drove KPMG & Deloitte partnerships. Cut time-to-hire by 25%. Managed cross-functional teams to shorten enrolment cycle from 20 to 15 days.</div>
+        </div>
+        <div class="exp-meta">May 2023<br>Dec 2023</div>
+      </div>
+      <div class="exp-item">
+        <div>
+          <div class="exp-role">Education Consultant — AU, NZ & UK</div>
+          <div class="exp-company">IDP Education, Agra</div>
+          <div class="exp-desc">100% visa approval rate across 30 students/intake. Structured ₹14Cr in education loan approvals. Led the data-driven acquisition initiatives that held the app's #1 national ranking for a year.</div>
+        </div>
+        <div class="exp-meta">Feb 2022<br>May 2023</div>
+      </div>
+      <div class="exp-item">
+        <div>
+          <div class="exp-role">Business Operations Associate</div>
+          <div class="exp-company">Decathlon, Agra</div>
+          <div class="exp-desc">Improved customer satisfaction to 85%. Drove 5.6% cluster sales increase. Reduced yearly product loss from 1.1% → 0.5%. Pivoted to corporate gifting during COVID, recovering 30% monthly revenue.</div>
+        </div>
+        <div class="exp-meta">Apr 2021<br>Nov 2021</div>
+      </div>
+      <div class="exp-item">
+        <div>
+          <div class="exp-role">International Student Ambassador</div>
+          <div class="exp-company">University of Warwick, UK</div>
+          <div class="exp-desc">Administrative support, event organization, student feedback capture, communications liaison between students and university teams.</div>
+        </div>
+        <div class="exp-meta">Feb 2025<br>Jan 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section style="background:var(--bg2)">
+  <div class="section-inner">
+    <div class="section-label reveal">The Toolkit</div>
+    <h2 class="section-title reveal">Skills on the <em>table</em></h2>
+    <div class="skills-grid reveal">
+      <div class="skill-chip highlight">Strategic Thinking</div>
+      <div class="skill-chip highlight">Cross-functional Leadership</div>
+      <div class="skill-chip highlight">Problem Solving</div>
+      <div class="skill-chip highlight">Stakeholder Management</div>
+      <div class="skill-chip highlight">Go-to-Market</div>
+      <div class="skill-chip">Data-driven Decision Making</div>
+      <div class="skill-chip">Financial Modelling</div>
+      <div class="skill-chip">Market Research</div>
+      <div class="skill-chip">Project Management</div>
+      <div class="skill-chip">Process Improvement</div>
+      <div class="skill-chip">KPI Tracking</div>
+      <div class="skill-chip">Negotiation</div>
+      <div class="skill-chip">Client Advising</div>
+      <div class="skill-chip">Quantitative Analysis</div>
+      <div class="skill-chip">Consulting</div>
+      <div class="skill-chip">Excel</div>
+      <div class="skill-chip">Tableau</div>
+      <div class="skill-chip">Salesforce</div>
+      <div class="skill-chip">PowerPoint</div>
+      <div class="skill-chip">R Language</div>
+      <div class="skill-chip">SAP</div>
+      <div class="skill-chip">McKinsey Forward ✓</div>
+      <div class="skill-chip">MSc Management (Warwick) ✓</div>
+      <div class="skill-chip">Solvay Sustainable Finance ✓</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- THE ASK -->
+<section class="ask-section" id="the-ask">
+  <div class="ask-inner">
+    <div class="section-label reveal" style="text-align:center">The One Paragraph</div>
+    <h2 class="section-title reveal">Why <em>Dining Out.</em><br>Why now.</h2>
+    <p class="reveal">I'm wired to find the gap between where a team is and where it could be — and then close it. I've done this across education, ops, and admissions, always in fast-moving environments with no playbook. Dining Out is building the infrastructure for how India goes out — that's an interesting problem at an interesting scale. I want to help build it. <span class="blank">[Add your personal 1–2 sentences: why District specifically, in your own words]</span></p>
+
+    <div class="contact-strip reveal">
+      <div class="contact-item">📱 +91 92058 62140</div>
+      <div class="contact-item">✉️ shreyawarwick@gmail.com</div>
+      <div class="contact-item">🔗 LinkedIn: shreya-gupta626</div>
+      <div class="contact-item">📍 Delhi, India</div>
+    </div>
+
+    <div style="margin-top:40px" class="reveal">
+      <a href="mailto:districthiring@eternal.com?subject=Generalist%20Application%20—%20Shreya%20Gupta&body=Hi%20District%20team%2C%0A%0AYou%20can%20view%20my%20full%20application%20at%3A%20[ADD-YOUR-GITHUB-PAGES-LINK]%0A%0ALooking%20forward%20to%20connecting.%0A%0A—%20Shreya" class="btn btn-primary" style="font-size:16px;padding:18px 40px;">
+        Send to District 🍽️
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Shreya Gupta · Generalist Application · 2026</span>
+  <span style="color:var(--purple-light)">Built for district. Not just applying — applying <em>right.</em></span>
+</footer>
+
+<script>
+  // Intersection observer for reveals
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), 0);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+
+  // Stagger siblings
+  document.querySelectorAll('.menu-grid, .plan-timeline, .exp-list, .skills-grid, .user-story-grid').forEach(parent => {
+    const children = parent.querySelectorAll(':scope > *');
+    children.forEach((child, i) => {
+      child.style.transitionDelay = `${i * 0.07}s`;
+    });
+  });
+</script>
+</body>
+</html>
